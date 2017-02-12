@@ -1,0 +1,50 @@
+name:         bitcoin-payment-protocol
+version:      '0.1.0.0'
+synopsis:     Bitcoin payment protocol (BIP 70/71)
+author:       Rune K. Svendsen
+maintainer:   runesvend@gmail.com
+license:      OtherLicense
+license-file: LICENSE
+
+default-extensions:
+- OverloadedStrings
+- MultiParamTypeClasses
+- TypeOperators
+- DataKinds
+- FlexibleContexts
+
+# Generate 'Proto.PayReq' from 'protobuf/pay_req.proto'
+build-type:         Custom
+extra-source-files: protobuf/pay_req.proto
+
+dependencies:
+- base        >=4.7 && <5
+- proto-lens  >=0.1 && <0.2
+- haskoin-core
+- time
+- servant
+- servant-server
+- wai
+- warp
+- http-media
+- bytestring
+- text
+- string-conversions
+- cereal
+
+ghc-options: -W
+
+library:
+  source-dirs:      src
+  exposed-modules:
+    - PayProto
+    - PayProto.API
+    - Proto.PayReq
+  dependencies:     proto-lens-protoc
+
+executables:
+  payproto-test:
+    source-dirs: test
+    main: Test.Main
+    dependencies:
+      - bitcoin-payment-protocol

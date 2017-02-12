@@ -1,0 +1,28 @@
+resolver: lts-7.18
+packages:
+- '.'
+- location:
+    git: https://github.com/google/proto-lens.git
+    commit: 9e13cc642ef1b654d5cd8fa50ff7aefb530b301d
+  extra-dep: true
+  subdirs:
+    - proto-lens-arbitrary
+    - proto-lens-benchmarks
+    - proto-lens-combinators
+    - proto-lens-descriptors
+    - proto-lens-optparse
+    - proto-lens-protoc
+    - proto-lens-tests
+    - proto-lens
+
+explicit-setup-deps:
+  bitcoin-payment-protocol: true
+
+extra-deps: []
+
+# Override default flag values for local packages and extra-deps
+flags: {}
+
+# Extra package databases containing global packages
+extra-package-dbs: []
+
