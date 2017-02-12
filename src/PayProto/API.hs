@@ -1,5 +1,9 @@
+module PayProto.API
+( module PayProto.API
+)
+where
 
-module PayProto.API where
+
 
 import qualified PayProto       as P
 import           Servant.API

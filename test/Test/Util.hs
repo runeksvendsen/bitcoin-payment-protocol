@@ -24,6 +24,8 @@ binaryHeader = H.addHeader "binary"
 userErr :: BS.ByteString -> S.Handler a
 userErr msg = S.throwError $ S.err404 { S.errBody = BL.fromStrict msg }
 
+
+-- Bitcoin
 addressToScript :: HC.Address -> HS.ScriptOutput
 addressToScript addr =
     case addr of
