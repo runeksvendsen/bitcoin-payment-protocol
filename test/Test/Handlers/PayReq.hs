@@ -11,13 +11,13 @@ import Data.Time.Clock.POSIX
 
 
 -- | Respond with PaymentRequest
-payRequestH :: String -> Handler (BinaryContent P.PaymentRequest)
-payRequestH host = do
+payRequestH :: Maybe String -> Handler (BinaryContent P.PaymentRequest)
+payRequestH hostM = do
     now <- liftIO $ round . utcTimeToPOSIXSeconds <$> getCurrentTime
     let payDetails = mkPayDetails outputValue now
     return $ binaryHeader $ P.PaymentRequest Nothing Nothing Nothing (encodeMessage payDetails) Nothing
   where
-    payUrl = "https://" <> cs host <> "/pay_deliver"
+    mkPayUrl h = "https://" <> cs h <> "/pay_deliver"
     mkPayDetails val ts =
         P.PaymentDetails
             Nothing                 -- Default/main network
@@ -25,6 +25,6 @@ payRequestH host = do
             ts
             (Just $ ts + 10 * 3600) -- 10-hour expiration
             (Just merchantTestMemo)
-            (Just payUrl)
+            (mkPayUrl <$> hostM)
             (Just merchantTestData)
     mkOut val = P.Output (Just val) (addressScriptBS testAddress)
