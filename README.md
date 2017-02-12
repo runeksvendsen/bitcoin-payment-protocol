@@ -1,6 +1,6 @@
 # Haskell Bitcoin payment protocol (BIP 70/71) library
 
-Just started.
+Initial commit.
 
 Includes test server that will respond with a PaymentRequest
 and accept a Payment, and respond with PaymentACK.
