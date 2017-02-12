@@ -1,4 +1,4 @@
-# Haskell Bitcoin payment protocol (BIP 70/71) library
+## Haskell Bitcoin payment protocol (BIP 70/71) library
 
 Initial commit.
 
