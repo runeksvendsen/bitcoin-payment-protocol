@@ -11,13 +11,13 @@ import Data.Time.Clock.POSIX
 
 
 -- | Respond with PaymentRequest
-payRequestH :: Handler (BinaryContent P.PaymentRequest)
-payRequestH = do
+payRequestH :: String -> Handler (BinaryContent P.PaymentRequest)
+payRequestH host = do
     now <- liftIO $ round . utcTimeToPOSIXSeconds <$> getCurrentTime
     let payDetails = mkPayDetails outputValue now
     return $ binaryHeader $ P.PaymentRequest Nothing Nothing Nothing (encodeMessage payDetails) Nothing
   where
-    payUrl = serverBaseUrl <> "pay_deliver"
+    payUrl = "https://" <> cs host <> "/pay_deliver"
     mkPayDetails val ts =
         P.PaymentDetails
             Nothing                 -- Default/main network

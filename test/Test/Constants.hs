@@ -10,9 +10,6 @@ import qualified Network.Haskoin.Crypto         as HC
 testAddress :: HC.Address
 testAddress = "1KAjXZxcNKjmGJsxix3pnuXGcMS2ZWsFQk"
 
-serverBaseUrl :: T.Text
-serverBaseUrl = "https://payproto.runeks.me/"
-
 outputValue :: Word64
 outputValue = round (1e6 :: Double)
 

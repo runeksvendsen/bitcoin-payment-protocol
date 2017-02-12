@@ -13,7 +13,7 @@ import qualified Servant.API.ResponseHeaders    as H
 type BinaryContent = H.Headers '[Header "Content-Transfer-Encoding" String]
 
 type PaymentRequest
-     = Get '[P.BTC_PAYREQ] (BinaryContent P.PaymentRequest)
+     = Header "Host" String :> Get '[P.BTC_PAYREQ] (BinaryContent P.PaymentRequest)
 
 type PaymentDeliver
      = ReqBody '[P.BTC_PAY] P.Payment
