@@ -15,7 +15,11 @@ import qualified Data.ByteString        as BS
 import qualified Data.ByteString.Lazy   as BL
 import qualified Network.Haskoin.Crypto as HC
 import qualified Network.Haskoin.Script as HS
+import qualified Servant.API.ResponseHeaders    as H
 
+
+binaryHeader :: a -> H.Headers '[S.Header "Content-Transfer-Encoding" String] a
+binaryHeader = H.addHeader "binary"
 
 userErr :: BS.ByteString -> S.Handler a
 userErr msg = S.throwError $ S.err404 { S.errBody = BL.fromStrict msg }

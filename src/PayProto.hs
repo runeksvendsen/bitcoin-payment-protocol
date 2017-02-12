@@ -8,12 +8,14 @@ import Data.ProtoLens
 import Proto.PayReq
 import qualified Data.ByteString.Lazy as BL
 import Servant.API
-import qualified Network.HTTP.Media as M
+import qualified Servant.API.ResponseHeaders    as H
+import qualified Network.HTTP.Media             as M
 import qualified Network.Haskoin.Transaction    as HT
 
 -- https://github.com/bitcoin/bips/blob/master/bip-0071.mediawiki#Specification
 -- TODO: "Content-Transfer-Encoding: binary"
 
+-- instance H.Headers "Content-Transfer-Encoding" PaymentRequest
 
 data BTC_PAYREQ
 data BTC_PAY

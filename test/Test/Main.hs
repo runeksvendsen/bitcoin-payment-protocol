@@ -44,12 +44,11 @@ type UserPayAPI = PayReqAPI :<|> PayDeliverAPI
 server :: Server UserPayAPI
 server = payRequestH :<|> payDeliverH
 
-
-payRequestH :: Handler P.PaymentRequest
+payRequestH :: Handler (BinaryContent P.PaymentRequest)
 payRequestH = do
     now <- liftIO $ round . utcTimeToPOSIXSeconds <$> getCurrentTime
     let payDetails = mkPayDetails outputValue now
-    return $ P.PaymentRequest Nothing Nothing Nothing (encodeMessage payDetails) Nothing
+    return $ binaryHeader $ P.PaymentRequest Nothing Nothing Nothing (encodeMessage payDetails) Nothing
   where
     payUrl = serverBaseUrl <> "pay_deliver"
     mkPayDetails val ts =
@@ -63,15 +62,15 @@ payRequestH = do
             (Just merchantTestData)
     mkOut val = P.Output (Just val) (addressScriptBS testAddress)
 
-handlePayment :: P.Payment -> Handler P.PaymentACK
+handlePayment :: P.Payment -> Handler (BinaryContent P.PaymentACK)
 handlePayment p@(P.Payment _ txBsL refundOutL _) = do
     let txL = rights $ map Bin.decode txBsL
     liftIO $ do
             putStrLn $ "Got these txs: " ++ show (txL :: [HT.Tx])
             putStrLn $ "And these refundOuts: " ++ show refundOutL
-    return $ P.PaymentACK p (Just "Thank you, please come again")
+    return $ binaryHeader $ P.PaymentACK p (Just "Thank you, please come again")
 
-payDeliverH :: P.Payment -> Handler P.PaymentACK
+payDeliverH :: P.Payment -> Handler (BinaryContent P.PaymentACK)
 payDeliverH p@(P.Payment (Just merchData) _ _ (Just merchMemo))
     | merchData /= merchantTestData =
         userErr $ "Incorrect merchant data. Expected: " <> merchantTestData
