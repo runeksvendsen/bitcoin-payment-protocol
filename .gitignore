@@ -17,3 +17,6 @@ cabal.sandbox.config
 *.eventlog
 .stack-work/
 cabal.project.local
+.idea/
+bitcoin-payment-protocol.cabal
+bitcoin-payment-protocol.iml
