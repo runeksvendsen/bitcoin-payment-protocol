@@ -1,8 +1,9 @@
 module Test.Main where
 
+import Test.Util
+import PayProto.API
 import qualified Test.Handlers.PayAck as Handler
 import qualified Test.Handlers.PayReq as Handler
-import           PayProto.API
 
 import Servant.API
 import Network.Wai
@@ -26,6 +27,8 @@ app :: Application
 app = serve userAPI server
 
 main :: IO ()
-main = run 8080 app
-
+main =
+    envReadPort >>= runApp . (fromMaybe 8080)
+  where
+    runApp port = run (fromIntegral port) app
 

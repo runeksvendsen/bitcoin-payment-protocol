@@ -10,6 +10,7 @@ import Control.Monad.IO.Class   as Ex
 import Data.Word                as Ex
 import Data.String.Conversions  as Ex
 import Data.Either              as Ex
+import Data.Maybe               as Ex
 
 import qualified Data.ByteString        as BS
 import qualified Data.ByteString.Lazy   as BL
@@ -17,6 +18,12 @@ import qualified Network.Haskoin.Crypto as HC
 import qualified Network.Haskoin.Script as HS
 import qualified Servant.API.ResponseHeaders    as H
 
+import           System.Environment (lookupEnv)
+import           Text.Read (readMaybe)
+
+
+envReadPort :: IO (Maybe Word)
+envReadPort = maybe Nothing readMaybe <$> lookupEnv "PORT"
 
 binaryHeader :: a -> H.Headers '[S.Header "Content-Transfer-Encoding" String] a
 binaryHeader = H.addHeader "binary"
