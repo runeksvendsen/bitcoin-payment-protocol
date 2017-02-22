@@ -16,7 +16,6 @@ import Data.Either              as Ex
 import Data.Maybe               as Ex
 import qualified Data.Text                      as T
 import Control.Monad            as Ex
-import qualified Data.ByteString        as BS
 
 import qualified Data.ByteString        as BS
 import qualified Data.ByteString.Lazy   as BL

@@ -16,12 +16,61 @@ module PayProto
 )
 where
 
-import Data.ProtoLens
+import PayProto.Util
 import Proto.PayReq
-import qualified Data.ByteString.Lazy     as BL
-import qualified Network.HTTP.Media       as M
+import Data.ProtoLens
 import Servant.API
+import Data.Word (Word64)
+import Data.Time.Clock.POSIX
+import Data.Time.Clock
+import Servant.Common.BaseUrl
+import Network.Haskoin.Crypto
 
+import qualified Data.ByteString.Lazy     as BL
+import qualified Data.ByteString          as BS
+import qualified Network.HTTP.Media       as M
+import qualified Data.Text                 as T
+import qualified Network.Haskoin.Constants as HCC
+
+
+-- | Create 'PaymentRequest' from current time + 'PayReqSpec'
+mkPayRequestT :: UTCTime -> PayReqSpec -> PaymentRequest
+mkPayRequestT now PayReqSpec{..} = do
+    let payDetails = mkPayDetails now
+    PaymentRequest Nothing Nothing Nothing (encodeMessage payDetails) Nothing
+  where
+    mkOut (adr,val) = Output (Just val) (addressScriptBS adr)
+    mkPayDetails now' =
+      let
+          ts = round . utcTimeToPOSIXSeconds $ now'
+          liveOrTestnet =
+              if HCC.getNetworkName HCC.getNetwork == "testnet"
+                  then Just "test"
+                  else Just "main"
+      in PaymentDetails
+            liveOrTestnet              -- Default/main network
+            (map mkOut prsOuts)
+            ts
+            (Just $ ts + prsExpSecs)
+            (Just prsMerchMemo)
+            (Just . cs $ show prsPayUrl)
+            (Just prsMerchData)
+
+
+data PayReqSpec = PayReqSpec
+  { prsOuts         :: [(Address, Word64)]
+  -- ^ Request payment to these (address,value) pairs
+  , prsPayUrl       :: BaseUrl
+  -- ^ The client will POST the paying Bitcoin tx to this URL
+  , prsExpSecs      :: Word64
+  -- ^ The client is ordered to make payment no later than this
+  --    many seconds after the payment request was sent
+  , prsMerchMemo    :: T.Text
+  -- ^ Message that will be displayed to the user
+  , prsMerchData    :: BS.ByteString
+  -- ^ Arbitrary data that will be echoed back to the server by
+  --    the client when payment is delivered
+  }
 
 
 -- https://github.com/bitcoin/bips/blob/master/bip-0071.mediawiki#Specification
