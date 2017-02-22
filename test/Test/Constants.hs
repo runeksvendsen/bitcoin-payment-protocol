@@ -10,16 +10,16 @@ import qualified Network.Haskoin.Crypto         as HC
 testAddress :: HC.Address
 testAddress = "1KAjXZxcNKjmGJsxix3pnuXGcMS2ZWsFQk"
 
-outputValue :: Word64
-outputValue = round (1e6 :: Double)
+testOutValue :: Word64
+testOutValue = round (1e6 :: Double)
 
-merchantTestData :: BS.ByteString
-merchantTestData = ">>>00-abcd=dcba-00<<<"
+testMerchantData :: BS.ByteString
+testMerchantData = ">>>00-abcd=dcba-00<<<"
 
-merchantTestMemo :: T.Text
-merchantTestMemo = "This is a memo, 123."
+testMerchantMemo :: T.Text
+testMerchantMemo = "This is a memo, 123."
 
-payAckMsg :: T.Text
-payAckMsg = "Thank you, please come again"
+testPayAckMemo :: T.Text
+testPayAckMemo = "Thank you, please come again"
 
 

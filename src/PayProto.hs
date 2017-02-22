@@ -1,3 +1,15 @@
+{-|
+Module      : PayProto
+Description : Bitcoin Payment Protocol (BIP70)
+Copyright   : (c) Rune K. Svendsen, 2016
+License     : PublicDomain
+Maintainer  : runesvend@gmail.com
+Stability   : experimental
+Portability : POSIX
+
+Message types and content types for Bitcoin Payment Protocol (BIP70).
+
+-}
 module PayProto
 ( module PayProto
 , module Proto.PayReq
@@ -6,46 +18,39 @@ where
 
 import Data.ProtoLens
 import Proto.PayReq
-import qualified Data.ByteString.Lazy as BL
+import qualified Data.ByteString.Lazy     as BL
+import qualified Network.HTTP.Media       as M
 import Servant.API
-import qualified Servant.API.ResponseHeaders    as H
-import qualified Network.HTTP.Media             as M
-import qualified Network.Haskoin.Transaction    as HT
+
+
 
 -- https://github.com/bitcoin/bips/blob/master/bip-0071.mediawiki#Specification
--- TODO: "Content-Transfer-Encoding: binary"
+data PAYREQ
+data PAY
+data PAYACK
 
--- instance H.Headers "Content-Transfer-Encoding" PaymentRequest
-
-data BTC_PAYREQ
-data BTC_PAY
-data BTC_PAYACK
-
-instance Accept BTC_PAYREQ where
+instance Accept PAYREQ where
     contentType _ = "application" M.// "bitcoin-paymentrequest"
 
-instance Accept BTC_PAY where
+instance Accept PAY where
     contentType _ = "application" M.// "bitcoin-payment"
 
-instance Accept BTC_PAYACK where
+instance Accept PAYACK where
     contentType _ = "application" M.// "bitcoin-paymentack"
 
 
-instance MimeRender BTC_PAYREQ PaymentRequest where
+instance MimeRender PAYREQ PaymentRequest where
     mimeRender _ = BL.fromStrict . encodeMessage
-instance MimeUnrender BTC_PAYREQ PaymentRequest where
+instance MimeUnrender PAYREQ PaymentRequest where
     mimeUnrender _ = decodeMessage . BL.toStrict
 
-instance MimeRender BTC_PAY Payment where
+instance MimeRender PAY Payment where
     mimeRender _ = BL.fromStrict . encodeMessage
-instance MimeUnrender BTC_PAY Payment where
+instance MimeUnrender PAY Payment where
     mimeUnrender _ = decodeMessage . BL.toStrict
 
-instance MimeRender BTC_PAYACK PaymentACK where
+instance MimeRender PAYACK PaymentACK where
     mimeRender _ = BL.fromStrict . encodeMessage
-instance MimeUnrender BTC_PAYACK PaymentACK where
+instance MimeUnrender PAYACK PaymentACK where
     mimeUnrender _ = decodeMessage . BL.toStrict
-
-
--- toHaskoinOut :: Output -> HT.TxOut
 

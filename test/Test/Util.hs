@@ -1,6 +1,9 @@
 module Test.Util
 ( module Test.Util
 , module Ex
+, HC.Address
+, T.Text
+, BS.ByteString
 )
 where
 
@@ -11,6 +14,9 @@ import Data.Word                as Ex
 import Data.String.Conversions  as Ex
 import Data.Either              as Ex
 import Data.Maybe               as Ex
+import qualified Data.Text                      as T
+import Control.Monad            as Ex
+import qualified Data.ByteString        as BS
 
 import qualified Data.ByteString        as BS
 import qualified Data.ByteString.Lazy   as BL

@@ -12,15 +12,11 @@ import qualified Data.Serialize                 as Bin
 
 -- | Respond to Payment with PaymentACK or 400 error
 payDeliverH :: P.Payment -> Handler (BinaryContent P.PaymentACK)
-payDeliverH p@(P.Payment (Just merchData) _ _ (Just merchMemo))
-    | merchData /= merchantTestData =
-        userErr $ "Incorrect merchant data. Expected: " <> merchantTestData
-    | merchMemo /= merchantTestMemo =
-        userErr $ "Incorrect memo data. Expected: " <> cs merchantTestMemo
+payDeliverH p@(P.Payment (Just merchData) _ _ _)
+    | merchData /= testMerchantData =
+        userErr $ "Incorrect merchant data. Expected: " <> testMerchantData
     | otherwise = handlePayment p
-payDeliverH (P.Payment Nothing _ _ (Just _)) = userErr "Missing merchant data"
-payDeliverH (P.Payment (Just _) _ _ Nothing) = userErr "Missing memo"
-payDeliverH (P.Payment Nothing _ _ Nothing) = userErr "Missing memo & merchant data"
+payDeliverH (P.Payment Nothing  _ _ _) = userErr "Missing merchant data"
 
 
 -- | Respond with PaymentACK
@@ -30,5 +26,5 @@ handlePayment p@(P.Payment _ txBsL refundOutL _) = do
     liftIO $ do
             putStrLn $ "Got these txs: " ++ show (txL :: [HT.Tx])
             putStrLn $ "And these refundOuts: " ++ show refundOutL
-    return $ binaryHeader $ P.PaymentACK p (Just payAckMsg)
+    return $ binaryHeader $ P.PaymentACK p (Just testPayAckMemo)
 

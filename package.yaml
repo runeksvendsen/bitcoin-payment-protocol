@@ -12,18 +12,20 @@ default-extensions:
 - TypeOperators
 - DataKinds
 - FlexibleContexts
+- RecordWildCards
 
 # Generate 'Proto.PayReq' from 'protobuf/pay_req.proto'
 build-type:         Custom
 extra-source-files: protobuf/pay_req.proto
 
 dependencies:
-- base        >=4.7 && <5
-- proto-lens  >=0.1 && <0.2
-- haskoin-core
+- base            >=4.7 && <5
+- proto-lens      >=0.1 && <0.2
+- haskoin-core    >=0.4 && <0.5
 - time
 - servant
 - servant-server
+- servant-client
 - wai
 - warp
 - http-media
