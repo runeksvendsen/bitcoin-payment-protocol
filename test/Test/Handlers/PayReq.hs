@@ -4,10 +4,12 @@ import qualified PayProto as P
 import           PayProto.API
 import           Test.Constants
 import           Test.Util
+import qualified Network.Haskoin.Constants as HCC
 
 import Data.ProtoLens
 import Servant
 import Data.Time.Clock.POSIX
+import Data.Time.Clock
 
 -- Hey
 import Servant.Common.BaseUrl
@@ -27,17 +29,27 @@ payRequestH hostM = do
             (round $ 10 * 3600)
             testMerchantData
 
-
 mkPayRequest :: PayReqSpec -> Handler P.PaymentRequest
-mkPayRequest PayReqSpec{..} = do
-    now <- liftIO $ round . utcTimeToPOSIXSeconds <$> getCurrentTime
+mkPayRequest spec = do
+    now <- liftIO getCurrentTime
+    return $ mkPayRequestT now spec
+
+-- | Pure: Create 'P.PaymentRequest' from current time + 'PayReqSpec'
+mkPayRequestT :: UTCTime -> PayReqSpec -> P.PaymentRequest
+mkPayRequestT now PayReqSpec{..} = do
     let payDetails = mkPayDetails now
-    return $ P.PaymentRequest Nothing Nothing Nothing (encodeMessage payDetails) Nothing
+    P.PaymentRequest Nothing Nothing Nothing (encodeMessage payDetails) Nothing
   where
     mkOut (adr,val) = P.Output (Just val) (addressScriptBS adr)
-    mkPayDetails ts =
-        P.PaymentDetails
-            Nothing                 -- Default/main network
+    mkPayDetails now =
+      let
+          ts = round . utcTimeToPOSIXSeconds $ now
+          liveOrTestnet =
+              if HCC.getNetworkName HCC.getNetwork == "testnet"
+                  then Just "test"
+                  else Just "main"
+      in P.PaymentDetails
+            liveOrTestnet              -- Default/main network
             (map mkOut prsOuts)
             ts
             (Just $ ts + prsExpSecs)
