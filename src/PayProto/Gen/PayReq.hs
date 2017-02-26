@@ -7,21 +7,14 @@ module PayProto.Gen.PayReq where
 import qualified Prelude
 import qualified Data.Int
 import qualified Data.Word
-import qualified Data.ProtoLens.Reexport.Data.ProtoLens
-       as Data.ProtoLens
-import qualified
-       Data.ProtoLens.Reexport.Data.ProtoLens.Message.Enum
-       as Data.ProtoLens.Message.Enum
-import qualified Data.ProtoLens.Reexport.Lens.Family2
-       as Lens.Family2
-import qualified Data.ProtoLens.Reexport.Lens.Family2.Unchecked
-       as Lens.Family2.Unchecked
-import qualified Data.ProtoLens.Reexport.Data.Default.Class
-       as Data.Default.Class
-import qualified Data.ProtoLens.Reexport.Data.Text as Data.Text
-import qualified Data.ProtoLens.Reexport.Data.Map as Data.Map
-import qualified Data.ProtoLens.Reexport.Data.ByteString
-       as Data.ByteString
+import Data.ProtoLens
+import Data.ProtoLens.Message.Enum
+import Lens.Family2
+import Lens.Family2.Unchecked
+import Data.Default.Class
+import Data.Text
+import Data.Map
+import Data.ByteString
 
 data Output = Output{_Output'amount ::
                      !(Prelude.Maybe Data.Word.Word64),

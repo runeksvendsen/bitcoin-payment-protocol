@@ -28,7 +28,7 @@ app = serve userAPI server
 
 main :: IO ()
 main =
-    envReadPort >>= runApp . (fromMaybe 8080)
+    envReadPort >>= runApp . fromMaybe 8080
   where
     runApp port = run (fromIntegral port) app
 
