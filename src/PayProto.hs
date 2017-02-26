@@ -12,12 +12,12 @@ Message types and content types for Bitcoin Payment Protocol (BIP70).
 -}
 module PayProto
 ( module PayProto
-, module Proto.PayReq
+, module PayProto.Gen.PayReq
 )
 where
 
 import PayProto.Util
-import Proto.PayReq
+import PayProto.Gen.PayReq
 import Data.ProtoLens
 import Servant.API
 import Data.Word (Word64)

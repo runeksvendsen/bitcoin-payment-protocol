@@ -14,9 +14,10 @@ default-extensions:
 - FlexibleContexts
 - RecordWildCards
 
-# Generate 'Proto.PayReq' from 'protobuf/pay_req.proto'
-build-type:         Custom
-extra-source-files: protobuf/pay_req.proto
+### Temporarily disable, because of dependency on haskell-src-exts == 1.17.*
+## Generate 'Proto.PayReq' from 'protobuf/pay_req.proto'
+#build-type:         Custom
+#extra-source-files: protobuf/pay_req.proto
 
 dependencies:
 - base            >=4.7 && <5
@@ -33,6 +34,10 @@ dependencies:
 - text
 - string-conversions
 - cereal
+- containers
+- data-default-class
+- lens-family
+
 
 ghc-options: -W
 
@@ -41,8 +46,10 @@ library:
   exposed-modules:
     - PayProto
     - PayProto.API
-    - Proto.PayReq
-  dependencies:     proto-lens-protoc
+    - PayProto.Util
+    - PayProto.Gen.PayReq
+#  other-modules:
+
 
 executables:
   payproto-test:
